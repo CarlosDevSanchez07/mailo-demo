@@ -1,36 +1,173 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mailo Demo - Sistema de Autenticación con NextAuth.js
 
-## Getting Started
+Una aplicación de demostración que implementa un sistema completo de autenticación usando NextAuth.js con múltiples proveedores, roles de usuario y vistas protegidas.
 
-First, run the development server:
+## 🚀 Características
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Autenticación múltiple**: Credenciales locales y GitHub OAuth
+- **Sistema de roles**: Usuario, Moderador y Administrador
+- **Vistas protegidas**: Control de acceso basado en roles
+- **Base de datos**: Postgres con Prisma ORM
+- **UI moderna**: Componentes de shadcn/ui
+- **TypeScript**: Tipado completo
+
+## 📋 Prerrequisitos
+
+- Node.js 18+
+- npm o yarn
+- Cuenta de GitHub (opcional, para OAuth)
+
+## 🛠️ Instalación
+
+1. **Clonar el repositorio**
+
+   ```bash
+   git clone <tu-repositorio>
+   cd mailo-demo
+   ```
+
+2. **Instalar dependencias**
+
+   ```bash
+   npm install
+   ```
+
+3. **Configurar variables de entorno**
+
+   ```bash
+   cp env.example .env.local
+   ```
+
+4. **Editar `.env.local`**
+
+   ```env
+   # Database
+   DATABASE_URL="file:./dev.db"
+
+   # NextAuth
+   NEXTAUTH_URL="http://localhost:3000"
+   NEXTAUTH_SECRET="tu-secret-super-seguro-aqui"
+
+   # GitHub OAuth (opcional)
+   GITHUB_ID="tu-github-client-id"
+   GITHUB_SECRET="tu-github-client-secret"
+   ```
+
+5. **Configurar base de datos**
+
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
+
+6. **Ejecutar el servidor de desarrollo**
+   ```bash
+   npm run dev
+   ```
+
+## 🔧 Configuración de GitHub OAuth (Opcional)
+
+1. Ve a [GitHub Developer Settings](https://github.com/settings/developers)
+2. Crea una nueva OAuth App
+3. Configura:
+   - **Application name**: Mailo Demo
+   - **Homepage URL**: `http://localhost:3000`
+   - **Authorization callback URL**: `http://localhost:3000/api/auth/callback/github`
+4. Copia el Client ID y Client Secret a tu `.env.local`
+
+## 📁 Estructura del Proyecto
+
+```
+src/
+├── app/
+│   ├── api/auth/
+│   │   ├── [...nextauth]/route.ts    # NextAuth API
+│   │   └── register/route.ts         # Registro de usuarios
+│   ├── auth/
+│   │   ├── signin/page.tsx           # Página de inicio de sesión
+│   │   └── signup/page.tsx           # Página de registro
+│   ├── dashboard/page.tsx            # Dashboard protegido
+│   ├── admin/page.tsx                # Panel de administración
+│   └── page.tsx                      # Página principal
+├── components/
+│   ├── auth/
+│   │   └── protected-route.tsx       # Componente de protección
+│   ├── providers/
+│   │   └── auth-provider.tsx         # Provider de NextAuth
+│   └── ui/                           # Componentes de UI
+├── hooks/
+│   └── use-auth.ts                   # Hook de autenticación
+├── lib/
+│   ├── auth.ts                       # Configuración de NextAuth
+│   └── prisma.ts                     # Cliente de Prisma
+└── types/
+    └── next-auth.d.ts                # Tipos de NextAuth
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔐 Sistema de Roles
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Cliente (CLIENT)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Acceso básico al dashboard
+- Ver información personal
+- Navegar por páginas públicas
+- Funciones de cliente
 
-## Learn More
+### Empresa (BUSINESS)
 
-To learn more about Next.js, take a look at the following resources:
+- Todas las funciones de Cliente
+- Panel de gestión de empresa
+- Funciones administrativas
+- Gestión de contenido empresarial
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛡️ Vistas Protegidas
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Públicas**: `/` (página principal)
+- **Protegidas**:
+  - `/dashboard` (requiere autenticación)
+  - `/admin` (requiere rol BUSINESS)
 
-## Deploy on Vercel
+## 🧪 Uso
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Registro**: Ve a `/auth/signup` para crear una cuenta
+2. **Inicio de sesión**: Ve a `/auth/signin` o usa GitHub OAuth
+3. **Dashboard**: Accede a `/dashboard` después de autenticarte
+4. **Empresa**: Ve a `/admin` si tienes rol de empresa
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔧 Comandos Útiles
+
+```bash
+# Generar cliente de Prisma
+npx prisma generate
+
+# Aplicar cambios a la base de datos
+npx prisma db push
+
+# Ver la base de datos
+npx prisma studio
+
+# Ejecutar en desarrollo
+npm run dev
+
+# Construir para producción
+npm run build
+```
+
+## 📝 Notas
+
+- Las contraseñas se encriptan con bcryptjs
+- La sesión se maneja con JWT
+- SQLite se usa para desarrollo (cambia a PostgreSQL para producción)
+- Todos los componentes están tipados con TypeScript
+
+## 🤝 Contribuir
+
+1. Fork el proyecto
+2. Crea una rama para tu feature
+3. Commit tus cambios
+4. Push a la rama
+5. Abre un Pull Request
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT.
