@@ -22,7 +22,7 @@ Una aplicación de demostración que implementa un sistema completo de autentica
 1. **Clonar el repositorio**
 
    ```bash
-   git clone <tu-repositorio>
+   git clone https://github.com/CarlosDevSanchez07/mailo-demo
    cd mailo-demo
    ```
 
@@ -47,6 +47,7 @@ Una aplicación de demostración que implementa un sistema completo de autentica
    # NextAuth
    NEXTAUTH_URL="http://localhost:3000"
    NEXTAUTH_SECRET="tu-secret-super-seguro-aqui"
+   NEXT_PUBLIC_BASE_URL="http://localhost:3000"
 
    # GitHub OAuth (opcional)
    GITHUB_ID="tu-github-client-id"
